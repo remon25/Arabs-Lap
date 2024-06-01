@@ -12,7 +12,7 @@ const LoginLayout = styled.main`
   gap: 3.2rem;
   background-color: var(--color-grey-50);
   @media screen and (max-width:576px) {
-    grid-template-columns: auto;
+    grid-template-columns: 90vw;
 
   }
 `;
