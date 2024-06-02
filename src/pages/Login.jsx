@@ -20,7 +20,9 @@ const LoginLayout = styled.main`
 function Login() {
   return (
     <LoginLayout>
-      <Logo />
+      {/* <Logo /> */}
+
+      <Heading as="h1" style={{ textAlign: "center" }}>Test</Heading>
       <Heading as="h4">تسجيل الدخول</Heading>
       <LoginForm />
     </LoginLayout>

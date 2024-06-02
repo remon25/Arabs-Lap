@@ -3,6 +3,7 @@ import styled from "styled-components";
 import Logo from "./Logo";
 import MainNav from "./MainNav";
 import { useSidebar } from '../context/SidebarContext';
+import Heading from './Heading';
 
 const StyledSidebar = styled.aside`
   background-color: var(--color-grey-0);
@@ -40,7 +41,8 @@ function Sidebar() {
 
   return (
     <StyledSidebar ref={sidebarRef} isSidebarOpen={isSidebarOpen}>
-      <Logo />
+      <Heading as="h1" style={{ textAlign: "center" }}>Test</Heading>
+      {/* <Logo /> */}
       <MainNav/>
     </StyledSidebar>
   );
