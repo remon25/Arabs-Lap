@@ -1,4 +1,3 @@
-/*DataBase Password uPELY9kfH89zU9JW*/
 
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";

@@ -1,5 +1,25 @@
 import supabase, { supabaseUrl } from "./supabase";
 
+export async function getUserRole(userId) {
+  const { data, error } = await supabase
+    .from("user_roles")
+    .select("role_id")
+    .eq("user_id", userId)
+    .single();
+
+  if (error) {
+    console.error("Error fetching user role:", error);
+    return null;
+  }
+
+  const roleId = data?.role_id;
+
+  console.log(roleId)
+
+  return roleId;
+}
+
+
 export async function signUp({ fullName, email, password }) {
   let { data, error } = await supabase.auth.signUp({
     email,
@@ -68,18 +88,17 @@ export async function updateCurrentUser({ fullName, avatar, password }) {
     .from("avatars")
     .upload(fileName, avatar);
 
-    if (storageError) throw new Error(storageError);
+  if (storageError) throw new Error(storageError);
 
   // 3 - update avatar in user
 
-  const {data:updatedUser,error:error2} = await supabase.auth.updateUser({
-    data:{
-      avatar:`${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`
-    }
-  })
+  const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
+    data: {
+      avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+    },
+  });
 
   if (error2) throw new Error(error2);
 
   return updatedUser;
-
 }
