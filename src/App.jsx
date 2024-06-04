@@ -8,6 +8,7 @@ import Cabins from "./pages/Cabins";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
+import UsersList from "./pages/UsersList";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import GlobalStyles from "./styles/GlopalStyles";
@@ -50,6 +51,7 @@ function App() {
               <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/account" element={<Account />} />
+              <Route path="/users-list" element={<UsersList />} />
             </Route>
             <Route path="/login" element={<Login />} />
             <Route path="*" element={<PageNotFound />} />

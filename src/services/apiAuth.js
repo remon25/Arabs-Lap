@@ -1,4 +1,4 @@
-import supabase, { supabaseUrl } from "./supabase";
+import supabase, { supabaseAdmin, supabaseUrl } from "./supabase";
 
 export async function getUserRole(userId) {
   const { data, error } = await supabase
@@ -14,11 +14,8 @@ export async function getUserRole(userId) {
 
   const roleId = data?.role_id;
 
-  console.log(roleId)
-
   return roleId;
 }
-
 
 export async function signUp({ fullName, email, password }) {
   let { data, error } = await supabase.auth.signUp({
@@ -95,6 +92,7 @@ export async function updateCurrentUser({ fullName, avatar, password }) {
   const { data: updatedUser, error: error2 } = await supabase.auth.updateUser({
     data: {
       avatar: `${supabaseUrl}/storage/v1/object/public/avatars/${fileName}`,
+      heloo: "hellooooooooooooooo",
     },
   });
 
@@ -102,3 +100,17 @@ export async function updateCurrentUser({ fullName, avatar, password }) {
 
   return updatedUser;
 }
+
+export async function fetchAllUsers() {
+  try {
+    const { data, error } = await supabaseAdmin.auth.admin.listUsers();
+    if (error) {
+      throw error;
+    }
+    return data;
+  } catch (error) {
+    console.error("Error fetching users:", error.message);
+  }
+  return null;
+}
+

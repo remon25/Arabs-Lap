@@ -1,4 +1,4 @@
-import { useState } from "react";
+import  { useState } from "react";
 import styled from "styled-components";
 
 const FileInputWrapper = styled.div`
@@ -33,22 +33,27 @@ const FileInputWrapper = styled.div`
   }
 `;
 
-const FileInput = () => {
+const FileInput = ({ id, accept, onChange, disabled }) => {
   const [fileName, setFileName] = useState("لم يتم اختيار صورة");
 
   const handleFileChange = (event) => {
     const file = event.target.files[0];
     setFileName(file ? file.name : "لم يتم اختيار صورة");
+    if (onChange) {
+      onChange(event);
+    }
   };
 
   return (
     <FileInputWrapper>
       <input
         type="file"
-        id="file"
+        id={id}
+        accept={accept}
         onChange={handleFileChange}
+        disabled={disabled}
       />
-      <label htmlFor="file">اختر صورة</label>
+      <label htmlFor={id}>اختر صورة</label>
       <span className="file-name">{fileName}</span>
     </FileInputWrapper>
   );

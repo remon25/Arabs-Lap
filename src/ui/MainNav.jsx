@@ -1,3 +1,4 @@
+import { useRoles } from "../features/authentication/useGetRoles";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
 import {
@@ -6,7 +7,11 @@ import {
   HiOutlineUsers,
   HiOutlineCog6Tooth,
   HiMiniDocumentText,
+  HiOutlineUser
 } from "react-icons/hi2";
+import { FaUserEdit } from "react-icons/fa";
+
+
 import { useSidebar } from '../context/SidebarContext';
 
 const NavList = styled.ul`
@@ -66,6 +71,8 @@ const StyledNavLink = styled(NavLink)`
 
 export default function MainNav() {
   const { closeSidebar } = useSidebar();
+  const {isAdmin } = useRoles();
+
 
   return (
     <nav>
@@ -88,12 +95,26 @@ export default function MainNav() {
             <span>تقارير ب</span>
           </StyledNavLink>
         </li>
-        <li>
-          <StyledNavLink to="/users" onClick={closeSidebar}>
-            <HiOutlineUsers />
-            <span>المستخدمين</span>
-          </StyledNavLink>
-        </li>
+        {isAdmin && (
+          <li>
+            <StyledNavLink to="/users" onClick={closeSidebar}>
+              <FaUserEdit />
+              <span>مستخدم جديد</span>
+            </StyledNavLink>
+          </li>
+        )}
+          <li>
+            <StyledNavLink to="/users-list" onClick={closeSidebar}>
+              <HiOutlineUsers />
+              <span>المستخدمين</span>
+            </StyledNavLink>
+          </li>
+          <li>
+            <StyledNavLink to="/account" onClick={closeSidebar}>
+              <HiOutlineUser />
+              <span>الحساب</span>
+            </StyledNavLink>
+          </li>
         <li>
           <StyledNavLink to="/settings" onClick={closeSidebar}>
             <HiOutlineCog6Tooth />

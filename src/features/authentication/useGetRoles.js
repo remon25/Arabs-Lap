@@ -14,9 +14,6 @@ export function useRoles() {
     enabled: !!user.user.id, 
   });
 
-  console.log(user_role);
-
-  console.log(user_role)
   return {
     user_role,
     isPending,
