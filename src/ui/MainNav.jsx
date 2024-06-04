@@ -1,18 +1,21 @@
 import { useRoles } from "../features/authentication/useGetRoles";
+import { useLogout } from "../features/authentication/useLogout";
 import { NavLink } from "react-router-dom";
 import styled from "styled-components";
+import SpinnerMini from "./SpinnerMini";
 import {
   HiOutlineHome,
   HiOutlineCalendar,
   HiOutlineUsers,
   HiOutlineCog6Tooth,
   HiMiniDocumentText,
-  HiOutlineUser
+  HiOutlineUser,
+  HiArrowRightOnRectangle,
 } from "react-icons/hi2";
+
 import { FaUserEdit } from "react-icons/fa";
 
-
-import { useSidebar } from '../context/SidebarContext';
+import { useSidebar } from "../context/SidebarContext";
 
 const NavList = styled.ul`
   display: flex;
@@ -69,10 +72,12 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+
+
 export default function MainNav() {
   const { closeSidebar } = useSidebar();
-  const {isAdmin } = useRoles();
-
+  const { isAdmin } = useRoles();
+  const { logout, isPending } = useLogout();
 
   return (
     <nav>
@@ -103,22 +108,30 @@ export default function MainNav() {
             </StyledNavLink>
           </li>
         )}
+        {isAdmin && (
           <li>
             <StyledNavLink to="/users-list" onClick={closeSidebar}>
               <HiOutlineUsers />
               <span>المستخدمين</span>
             </StyledNavLink>
           </li>
-          <li>
-            <StyledNavLink to="/account" onClick={closeSidebar}>
-              <HiOutlineUser />
-              <span>الحساب</span>
-            </StyledNavLink>
-          </li>
+        )}
+        <li>
+          <StyledNavLink to="/account" onClick={closeSidebar}>
+            <HiOutlineUser />
+            <span>الحساب</span>
+          </StyledNavLink>
+        </li>
         <li>
           <StyledNavLink to="/settings" onClick={closeSidebar}>
             <HiOutlineCog6Tooth />
             <span>الإعدادات</span>
+          </StyledNavLink>
+        </li>
+        <li style={{ marginTop: "25px" }}>
+          <StyledNavLink disabled={isPending} onClick={logout}>
+            {isPending ? <SpinnerMini /> : <HiArrowRightOnRectangle />}
+            <span>خروج</span>
           </StyledNavLink>
         </li>
       </NavList>

@@ -1,13 +1,13 @@
 import Heading from "../ui/Heading";
 import SignupForm from "../features/authentication/SignupForm";
-import ProtectedRouteSignUp from "../ui/ProtectedRouteSignUp";
+import ProtectedRouteRoles from "../ui/ProtectedRouteRoles";
 function NewUsers() {
   return (
     <>
-      <ProtectedRouteSignUp>
+      <ProtectedRouteRoles>
         <Heading as="h1">انشئ مستخدم جديد</Heading>
         <SignupForm />
-      </ProtectedRouteSignUp>
+      </ProtectedRouteRoles>
     </>
   );
 }

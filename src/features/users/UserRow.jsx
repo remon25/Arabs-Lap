@@ -15,6 +15,11 @@ const Row = styled.div`
     border: 0.5px solid #f5ecbc;
     border-radius: 4px;
   }
+  @media screen and (max-width: 480px) {
+    column-gap: 0.5rem;
+    padding: 1.6rem 1rem;
+
+  }
 `;
 const Img = styled.img`
   display: block;
@@ -32,8 +37,13 @@ const User = styled.div`
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
+  @media screen and (max-width: 768px) {
+    font-size: 1.2rem;
+  }
+  @media screen and (max-width: 480px) {
+    font-size: 1rem;
+  }
 `;
-
 
 export default function UserRow({ user }) {
   const image = user.user_metadata?.avatar || "/default-user.jpg";
@@ -42,7 +52,7 @@ export default function UserRow({ user }) {
     <Row type="horizontal">
       <div></div>
       <User>{user.user_metadata?.fullName}</User>
-      <div>{user.email}</div>
+      <User>{user.email}</User>
       <div></div>
       <Img src={image} />
       <div></div>

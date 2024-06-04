@@ -27,6 +27,15 @@ const TableHeader = styled.header`
   font-weight: 600;
   color: var(--color-grey-600);
   padding: 1.6rem 2.4rem;
+  @media screen and (max-width: 992px) {
+    font-size: 0.8rem;
+    
+  }
+  @media screen and (max-width: 480px) {
+    column-gap: 0.5rem;
+    padding: 1.6rem 1rem;
+
+  }
 `;
 
 export default function UsersTable() {

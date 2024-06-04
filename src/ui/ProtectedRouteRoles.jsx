@@ -13,7 +13,7 @@ const FullPage = styled.div`
   align-items: center;
   justify-content: center;
 `;
-export default function ProtectedRouteSignUp({ children }) {
+export default function ProtcetedRouteRoles({ children }) {
   const navigate = useNavigate();
   // 1 - load authenticated user
 
