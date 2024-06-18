@@ -3,7 +3,6 @@ import styled from "styled-components";
 import { fetchAllUsers } from "../../services/apiAuth.js";
 import Spinner from "../../ui/Spinner.jsx";
 import UserRow from "./UserRow.jsx";
-// import CabinRow from "./CabinRow.jsx";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);

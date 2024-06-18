@@ -72,8 +72,6 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
-
-
 export default function MainNav() {
   const { closeSidebar } = useSidebar();
   const { isAdmin } = useRoles();
@@ -95,9 +93,9 @@ export default function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/cabins" onClick={closeSidebar}>
+          <StyledNavLink to="/lab-report" onClick={closeSidebar}>
             <HiMiniDocumentText />
-            <span>تقارير ب</span>
+            <span>تقرير المختبر</span>
           </StyledNavLink>
         </li>
         {isAdmin && (

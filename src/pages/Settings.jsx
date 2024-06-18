@@ -1,4 +1,4 @@
-import CreateCabinForm from "../features/cabins/CreateCabinForm";
+import CreateCabinForm from "../features/lab-report/CreateLabReportForm";
 import UpdateSettingsForm from "../features/settings/UpdateSettingsForm";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";

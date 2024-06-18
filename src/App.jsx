@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Dashboard from "./pages/Dashboard";
 import Bookings from "./pages/Bookings";
-import Cabins from "./pages/Cabins";
+import LabReport from "./pages/LabReport";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
@@ -47,7 +47,7 @@ function App() {
               <Route path="/bookings" element={<Bookings />} />
               <Route path="/bookings/:bookingId" element={<Booking />} />
               <Route path="/checkin/:bookingId" element={<CheckIn />} />
-              <Route path="/cabins" element={<Cabins />} />
+              <Route path="/lab-report" element={<LabReport />} />
               <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/account" element={<Account />} />

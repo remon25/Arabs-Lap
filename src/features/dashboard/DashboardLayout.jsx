@@ -3,7 +3,7 @@ import { useRecentBookings } from "./useRecentBookings";
 import { useRecentStays } from "./useRecentStays";
 import Spinner from "../../ui/Spinner.jsx";
 import Stats from "./Stats.jsx";
-import { useGetCabins } from "../cabins/useGetCabins.js";
+import { useGetLabReport } from "../lab-report/useGetLabReport.js";
 import SalesChart from "./SalesChart.jsx";
 import DurationChart from "./DurationChart.jsx";
 import TodayActivity from "../../features/check-in-out/TodayActivity.jsx";
@@ -22,7 +22,7 @@ export default function DashboardLayout() {
     confirmedStays = [],
     numDays,
   } = useRecentStays();
-  const { cabins = [] } = useGetCabins();
+  const { cabins = [] } = useGetLabReport();
 
   if (isLodingBooking || isLoadingStays) return <Spinner />;
 
