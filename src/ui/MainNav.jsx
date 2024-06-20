@@ -8,10 +8,10 @@ import {
   HiOutlineCalendar,
   HiOutlineUsers,
   HiOutlineCog6Tooth,
-  HiMiniDocumentText,
   HiOutlineUser,
   HiArrowRightOnRectangle,
 } from "react-icons/hi2";
+import { ImLab } from "react-icons/im";
 
 import { FaUserEdit } from "react-icons/fa";
 
@@ -94,7 +94,7 @@ export default function MainNav() {
         </li>
         <li>
           <StyledNavLink to="/lab-report" onClick={closeSidebar}>
-            <HiMiniDocumentText />
+            <ImLab />
             <span>تقرير المختبر</span>
           </StyledNavLink>
         </li>

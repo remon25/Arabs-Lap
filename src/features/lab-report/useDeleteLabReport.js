@@ -8,7 +8,7 @@ export function useDeleteLabReport() {
   const { isPending: isDeleting, mutate } = useMutation({
     mutationFn: deleteLabReport,
     onSuccess: () => {
-      toast.success("Cabin Deleted Successfully");
+      toast.success("تم حذف التقرير بنجاح");
       queryClient.invalidateQueries({ queryKey: ["lab-report"] }); // for immediate deleting without reloading
     },
     onError: (err) => toast.error(err.message),

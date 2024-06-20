@@ -7,13 +7,14 @@ import LabFormRow, { LabNotesFormRow } from "../../ui/FormRow";
 import { useCreateLabReport } from "./useCreateLabReport";
 import { useEditLabReport } from "./useEditLabReport";
 import { useGetUserId } from "./useGetLabReport";
-import { Label } from "recharts";
+import { useDeleteLabReport } from "./useDeleteLabReport";
 
 function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
   const { isAdding, createLabReport } = useCreateLabReport();
   const { isEditting, editLabReport } = useEditLabReport();
+  const { isDeleting, mutate } = useDeleteLabReport();
   const isWorking = isEditting || isAdding;
-  const { labReportId, ...editValues } = labReportToEdit;
+  const { id: labReportId, ...editValues } = labReportToEdit;
   const { userId } = useGetUserId();
   const isEditSession = (function () {
     for (const prop in labReportToEdit) {
@@ -24,20 +25,23 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
 
     return false;
   })();
-  const { register, handleSubmit, reset, getValues, formState } = useForm({
+  const { register, handleSubmit, reset, formState } = useForm({
     defaultValues: isEditSession ? editValues : {},
   });
   const { errors } = formState;
   console.log(isEditSession);
+  console.log("lab report ID", labReportId);
   function onSubmit(data) {
-    if (isEditSession)
+    if (isEditSession) {
+      // eslint-disable-next-line no-unused-vars
+      const { sample_writer, ...dataWithoutSampleWriter } = data;
       editLabReport(
-        { newLabReportData: { ...data }, id: labReportId },
+        { editedData: dataWithoutSampleWriter, id: labReportId },
         {
           onSuccess: () => [reset(), onClose?.()],
         }
       );
-    else
+    } else {
       createLabReport(
         { ...data, sample_writer: userId },
         {
@@ -47,7 +51,8 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           },
         }
       );
-    console.log({ ...data, sample_writer: userId });
+    }
+    console.log(data);
   }
   // eslint-disable-next-line no-unused-vars
   function onError(errors) {}
@@ -111,7 +116,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="TDS-inlet"
           placeholder="Inlet"
           disabled={isWorking}
-          {...register("TDS_inlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("TDS_inlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
         <Input
@@ -119,7 +127,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="TDS-outlet"
           placeholder="Outlet"
           disabled={isWorking}
-          {...register("TDS_outlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("TDS_outlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
       </LabFormRow>
@@ -129,7 +140,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="Temp-inlet"
           placeholder="Inlet"
           disabled={isWorking}
-          {...register("temp_inlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("temp_inlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
         <Input
@@ -137,7 +151,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="Temp-outlet"
           placeholder="Outlet"
           disabled={isWorking}
-          {...register("temp_outlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("temp_outlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
       </LabFormRow>
@@ -171,7 +188,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="PH-inlet"
           placeholder="Inlet"
           disabled={isWorking}
-          {...register("PH_inlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("PH_inlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
         <Input
@@ -179,7 +199,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="PH-outlet"
           placeholder="Outlet_inlet"
           disabled={isWorking}
-          {...register("PH_outlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("PH_outlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
       </LabFormRow>
@@ -189,7 +212,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="iron-inlet"
           placeholder="Inlet"
           disabled={isWorking}
-          {...register("iron_inlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("iron_inlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
         <Input
@@ -197,13 +223,21 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           id="iron-outlet"
           placeholder="Outlet"
           disabled={isWorking}
-          {...register("iron_outlet", { required: "This field is required", valueAsNumber: true })}
+          {...register("iron_outlet", {
+            required: "This field is required",
+            valueAsNumber: true,
+          })}
           step="0.0001"
         />
       </LabFormRow>
 
       <LabNotesFormRow label="التاريخ و الوقت">
-      <Input type="datetime-local" id="date" {...register('sample_date', { required: 'هذا الحقل مطلوب' })} />
+        <Input
+          type="datetime-local"
+          id="date"
+          step="1"
+          {...register("sample_date", { required: "هذا الحقل مطلوب" })}
+        />
       </LabNotesFormRow>
       <LabNotesFormRow label="ملاحظات" error={errors?.description?.message}>
         <Textarea

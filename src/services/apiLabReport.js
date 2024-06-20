@@ -52,13 +52,13 @@ export async function createEditLabReport(newLabReport, id) {
     query = query.insert([{ ...newLabReport }]);
   }
 
-  //B)EDIT
-  if (id) {
-    query = query
-      .update({ ...newLabReport })
-      .eq("id", id)
-      .select();
-  }
+  // //B)EDIT
+  // if (id) {
+  //   query = query
+  //     .update({ ...newLabReport })
+  //     .eq("id", id)
+  //     .select();
+  // }
   const { data, error } = await query.select().single();
 
   if (error) {
@@ -79,3 +79,16 @@ export async function deleteLabReport(id) {
   }
   return data;
 }
+
+
+export async function editLabreportApi(editedData,id){
+
+  const { data, error } = await supabase
+  .from('lab_report')
+  .update({ ...editedData })
+  .eq('id', id)
+  .select()
+  console.log(editedData,id)
+  return data;
+}
+
