@@ -7,11 +7,11 @@ function LabReport() {
   return (
     <>
       <Row type="horizontal">
-        <Heading as="h1">اضف إلى تقرير المختبر</Heading>
+        <Heading as="h2">اضف إلى تقرير المختبر</Heading>
+        <AddReport />
       </Row>
       <Row>
         <ReportTable />
-        <AddReport />
       </Row>
     </>
   );
