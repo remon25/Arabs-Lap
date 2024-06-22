@@ -24,8 +24,9 @@ const StyledTable = styled.div`
   td {
     padding: 8px;
     border: 1px solid #ddd;
-    white-space: nowrap; // Prevent wrapping
+    word-wrap: break-word; /* Handle long content */
   }
+
   th {
     background-color: #f4f4f4;
   }
@@ -64,7 +65,7 @@ export default function ReportTable() {
 
       if (isAdmin) {
         baseColumns.push({
-          Header: "تعديل | حذف",
+          Header: "تعديل / حذف",
           accessor: "edit_delete",
           Cell: ({ row }) => {
             return (

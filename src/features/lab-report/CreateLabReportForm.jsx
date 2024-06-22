@@ -7,12 +7,10 @@ import LabFormRow, { LabNotesFormRow } from "../../ui/FormRow";
 import { useCreateLabReport } from "./useCreateLabReport";
 import { useEditLabReport } from "./useEditLabReport";
 import { useGetUserId } from "./useGetLabReport";
-import { useDeleteLabReport } from "./useDeleteLabReport";
 
 function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
   const { isAdding, createLabReport } = useCreateLabReport();
   const { isEditting, editLabReport } = useEditLabReport();
-  const { isDeleting, mutate } = useDeleteLabReport();
   const isWorking = isEditting || isAdding;
   const { id: labReportId, ...editValues } = labReportToEdit;
   const { userId } = useGetUserId();
