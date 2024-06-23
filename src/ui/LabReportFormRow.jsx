@@ -32,6 +32,8 @@ const StyledFormRow = styled.div`
     grid-template-columns: unset;
     grid-template-areas: "label label" "input-1 input-2";
     row-gap: 0.6rem;
+    padding: 0.5rem 0;
+
   }
 `;
 const Label = styled.label`

@@ -43,6 +43,9 @@ direction: ltr;
 }
 @media screen and (max-width: 600px) {
     width: 40rem;
+    max-height: 90vh;
+    max-height: 90svh;
+    overflow-y: auto;
 }
 @media screen and (max-width: 480px) {
     width: 25rem;
