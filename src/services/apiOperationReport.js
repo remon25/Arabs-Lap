@@ -7,32 +7,32 @@ export async function getUserId() {
   return user.user.id;
 }
 
-export async function getLabReport() {
+export async function getOperationReport() {
   try {
-    const { data, error } = await supabase.from("lab_report").select("*");
+    const { data, error } = await supabase.from("operation_report").select("*");
 
     if (error) {
       throw new Error(error.message);
     }
 
     if (data.length === 0) {
-      throw new Error("No lab reports found.");
+      throw new Error("لايوجد تقارير تشغيل");
     }
 
     const finalData = await Promise.all(
       data.map(async (item) => {
-        const userId = item.sample_writer;
+        const userId = item.writer;
         const { data: user, error: userError } = await supabaseAdmin.auth.admin.getUserById(
           userId
         );
         if (userError) {
           throw new Error(userError.message);
         }
-        return { ...item, sample_writer: user?.user.user_metadata?.fullName };
+        return { ...item, writer: user?.user.user_metadata?.fullName };
       })
     );
 
-    console.log(finalData);
+    console.log("Operation Report",finalData);
     return finalData;
   } catch (error) {
     throw new Error(error.message);
@@ -40,24 +40,18 @@ export async function getLabReport() {
 }
 
 
+getOperationReport();
 
-export async function createEditLabReport(newLabReport, id) {
+export async function createEditOperationReport(newOperationReport, id) {
   // 1. Create/edit cabin
 
-  let query = supabase.from("lab_report");
+  let query = supabase.from("operation_report");
 
   //A) CREATE
   if (!id) {
-    query = query.insert([{ ...newLabReport }]);
+    query = query.insert([{ ...newOperationReport }]);
   }
 
-  // //B)EDIT
-  // if (id) {
-  //   query = query
-  //     .update({ ...newLabReport })
-  //     .eq("id", id)
-  //     .select();
-  // }
   const { data, error } = await query.select().single();
 
   if (error) {
@@ -68,9 +62,9 @@ export async function createEditLabReport(newLabReport, id) {
   return data;
 }
 
-export async function deleteLabReport(id) {
+export async function deleteOperationReport(id) {
   const { data, error } = await supabase
-    .from("lab_report")
+    .from("operation_report")
     .delete()
     .eq("id", id);
   if (error) {
@@ -80,10 +74,10 @@ export async function deleteLabReport(id) {
 }
 
 
-export async function editLabreportApi(editedData,id){
+export async function editOperationreportApi(editedData,id){
 
   const { data, error } = await supabase
-  .from('lab_report')
+  .from('operation_report')
   .update({ ...editedData })
   .eq('id', id)
   .select()
