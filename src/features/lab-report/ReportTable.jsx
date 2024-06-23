@@ -74,7 +74,7 @@ const StyledTable = styled.div`
     table tr {
       border-bottom: 3px solid #ddd;
       display: block;
-      margin-bottom: 0.625em;
+      margin-bottom: 1.625em;
     }
 
     table td {

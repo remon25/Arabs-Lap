@@ -1,12 +1,13 @@
-import Input from "../../ui/Input";
-import { LabForm } from "../../ui/Form";
+import LapReportInput from "../../ui/LapReportInput";
+import { LabForm } from "../../ui/LabReportForm";
 import Button from "../../ui/Button";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
-import LabFormRow, { LabNotesFormRow } from "../../ui/FormRow";
+import { LabNotesFormRow } from "../../ui/FormRow";
 import { useCreateLabReport } from "./useCreateLabReport";
 import { useEditLabReport } from "./useEditLabReport";
 import { useGetUserId } from "./useGetLabReport";
+import { LabReportFormRow } from "../../ui/LabReportFormRow";
 
 function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
   const { isAdding, createLabReport } = useCreateLabReport();
@@ -60,8 +61,8 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
       onSubmit={handleSubmit(onSubmit, onError)}
       type={onClose ? "modal" : "regular"}
     >
-      <LabFormRow label="Turbidity" error={errors?.turbidity?.message}>
-        <Input
+      <LabReportFormRow label="Turbidity" error={errors?.turbidity?.message}>
+        <LapReportInput
           type="number"
           id="turbidity-inlet"
           placeholder="Inlet"
@@ -72,7 +73,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="turbidity-outlet"
           placeholder="Outlet"
@@ -83,9 +84,12 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="Free Chlorine" error={errors?.freeChlorine?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow
+        label="Free Chlorine"
+        error={errors?.freeChlorine?.message}
+      >
+        <LapReportInput
           type="number"
           id="free-chlorine-inlet"
           placeholder="Inlet"
@@ -96,7 +100,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="free-chlorine-outlet"
           placeholder="Outlet"
@@ -107,9 +111,9 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="TDS" error={errors?.TDS?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow label="TDS" error={errors?.TDS?.message}>
+        <LapReportInput
           type="number"
           id="TDS-inlet"
           placeholder="Inlet"
@@ -120,7 +124,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="TDS-outlet"
           placeholder="Outlet"
@@ -131,9 +135,9 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="Temp" error={errors?.Temp?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow label="Temp" error={errors?.Temp?.message}>
+        <LapReportInput
           type="number"
           id="Temp-inlet"
           placeholder="Inlet"
@@ -144,7 +148,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="Temp-outlet"
           placeholder="Outlet"
@@ -155,9 +159,12 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="Conductivity" error={errors?.Conductivity?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow
+        label="Conductivity"
+        error={errors?.Conductivity?.message}
+      >
+        <LapReportInput
           type="number"
           id="conductivity-inlet"
           placeholder="Inlet"
@@ -168,7 +175,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="conductivity-outlet"
           placeholder="Outlet"
@@ -179,9 +186,9 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="PH" error={errors?.PH?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow label="PH" error={errors?.PH?.message}>
+        <LapReportInput
           type="number"
           id="PH-inlet"
           placeholder="Inlet"
@@ -192,10 +199,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="PH-outlet"
-          placeholder="Outlet_inlet"
+          placeholder="Outlet"
           disabled={isWorking}
           {...register("PH_outlet", {
             required: "This field is required",
@@ -203,9 +210,9 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
-      <LabFormRow label="Iron" error={errors?.iron?.message}>
-        <Input
+      </LabReportFormRow>
+      <LabReportFormRow label="Iron" error={errors?.iron?.message}>
+        <LapReportInput
           type="number"
           id="iron-inlet"
           placeholder="Inlet"
@@ -216,7 +223,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-        <Input
+        <LapReportInput
           type="number"
           id="iron-outlet"
           placeholder="Outlet"
@@ -227,10 +234,10 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           })}
           step="0.0001"
         />
-      </LabFormRow>
+      </LabReportFormRow>
 
       <LabNotesFormRow label="التاريخ و الوقت">
-        <Input
+        <LapReportInput
           type="datetime-local"
           id="date"
           step="1"
@@ -246,7 +253,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
           {...register("notes")}
         />
       </LabNotesFormRow>
-      <LabFormRow>
+      <LabReportFormRow>
         {/* type is an HTML attribute! */}
         <Button variation="secondary" type="reset" onClick={() => onClose?.()}>
           إلغاء
@@ -254,7 +261,7 @@ function CreateLabReportForm({ labReportToEdit = {}, onClose }) {
         <Button disabled={isWorking}>
           {isEditSession ? "تعديل التقرير" : "اضف تقرير"}
         </Button>
-      </LabFormRow>
+      </LabReportFormRow>
     </LabForm>
   );
 }
