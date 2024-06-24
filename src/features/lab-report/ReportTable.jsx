@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import Spinner from "../../ui/Spinner.jsx";
 import { useGetLabReport } from "./useGetLabReport.js";
 import { useRoles } from "../authentication/useGetRoles.js";
@@ -173,6 +173,8 @@ export default function ReportTable() {
   const { isLoading, labReports } = useGetLabReport();
   const { isDeleting, mutate } = useDeleteLabReport();
 
+  const [dateFilter, setDateFilter] = useState("");
+
   console.log("labReports:", labReports);
 
   const columns = useMemo(() => {
@@ -234,10 +236,20 @@ export default function ReportTable() {
     return baseColumns;
   }, [isAdmin, isDeleting, mutate]);
 
+  const filteredData = useMemo(() => {
+    if (!dateFilter) return labReports;
+    return labReports.filter((report) => {
+      const reportDate = new Date(report.sample_date).toLocaleDateString(
+        "en-CA"
+      );
+      return reportDate.includes(dateFilter);
+    });
+  }, [labReports, dateFilter]);
+
   const data = useMemo(() => {
     // Ensure labReports is an array before passing it to useTable
-    return Array.isArray(labReports) ? labReports : [];
-  }, [labReports]);
+    return Array.isArray(filteredData) ? filteredData : [];
+  }, [filteredData]);
 
   const {
     getTableProps,
@@ -270,6 +282,14 @@ export default function ReportTable() {
 
   return (
     <>
+      <h4>البحث بالتاريخ </h4>
+
+      <Input
+        type="date"
+        value={dateFilter}
+        onChange={(e) => setDateFilter(e.target.value)}
+        placeholder="Filter by Date"
+      />
       <Menus>
         <StyledTable>
           <div className="mobile-sort">
@@ -347,7 +367,13 @@ export default function ReportTable() {
       </Menus>
       {/* Pagination Controls */}
       <StyledPagination>
-        <div style={{ display: "flex",alignItems: "center",justifyContent: "center" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
           <PaginationButton
             onClick={() => gotoPage(0)}
             disabled={!canPreviousPage}
@@ -377,7 +403,14 @@ export default function ReportTable() {
             <HiChevronDoubleRight />
           </PaginationButton>{" "}
         </div>
-        <div style={{ display: "flex", alignItems: "center",justifyContent: "space-between",fontSize: "1.3rem" }}>
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            fontSize: "1.3rem",
+          }}
+        >
           <span style={{ marginRight: "1rem" }}>
             Page{" "}
             <strong>
@@ -385,7 +418,7 @@ export default function ReportTable() {
             </strong>{" "}
           </span>
           <span>
-           |  Go to page:{" "}
+            | Go to page:{" "}
             <Input
               type="number"
               defaultValue={pageIndex + 1}

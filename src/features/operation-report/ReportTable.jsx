@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useState, useMemo } from "react";
 import Spinner from "../../ui/Spinner.jsx";
 import { useGetOperationReport } from "./useGetOperationReport.js";
 import { useRoles } from "../authentication/useGetRoles.js";
@@ -111,7 +111,6 @@ const StyledTable = styled.div`
   }
 `;
 
-
 const StyledHead = styled.th`
   background-color: var(--color-grey-50) !important;
   border-bottom: 1px solid var(--color-grey-100) !important;
@@ -178,8 +177,7 @@ export default function ReportTable() {
   const { isAdmin } = useRoles();
   const { isLoading, operationReports } = useGetOperationReport();
   const { isDeleting, mutate } = useDeleteOperationReport();
-
-  console.log("labReports:", operationReports);
+  const [dateFilter, setDateFilter] = useState("");
 
   const columns = useMemo(() => {
     const baseColumns = [
@@ -241,10 +239,18 @@ export default function ReportTable() {
     return baseColumns;
   }, [isAdmin, isDeleting, mutate]);
 
+  const filteredData = useMemo(() => {
+    if (!dateFilter) return operationReports;
+    return operationReports.filter((report) => {
+      const reportDate = new Date(report.التاريخ).toISOString().split("T")[0];
+      const filterDate = new Date(dateFilter).toISOString().split("T")[0];
+      return reportDate === filterDate;
+    });
+  }, [dateFilter, operationReports]);
+
   const data = useMemo(() => {
-    // Ensure labReports is an array before passing it to useTable
-    return Array.isArray(operationReports) ? operationReports : [];
-  }, [operationReports]);
+    return Array.isArray(filteredData) ? filteredData : [];
+  }, [filteredData]);
 
   const {
     getTableProps,
@@ -277,6 +283,13 @@ export default function ReportTable() {
 
   return (
     <>
+      <h4>البحث بالتاريخ </h4>
+      <Input
+        type="date"
+        value={dateFilter}
+        onChange={(e) => setDateFilter(e.target.value)}
+        placeholder="Filter by Date"
+      />
       <Menus>
         <StyledTable>
           <div className="mobile-sort">
@@ -290,7 +303,7 @@ export default function ReportTable() {
                   <div
                     key={column.id}
                     scope="col"
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column.getSortByToggleProps()}
                   >
                     {column.render("Header")}
                     <span>
@@ -315,7 +328,7 @@ export default function ReportTable() {
                 >
                   {headerGroup.headers.map((column, columnIndex) => (
                     <StyledHead
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getSortByToggleProps()}
                       key={columnIndex}
                     >
                       {column.render("Header")}
