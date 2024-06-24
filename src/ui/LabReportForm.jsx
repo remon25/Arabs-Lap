@@ -1,6 +1,7 @@
 import styled, { css } from "styled-components";
 
 const Form = styled.form`
+  overflow: auto;
   @media screen and (max-width: 576px) {
     padding: 2.4rem 2rem;
   }
@@ -22,7 +23,6 @@ const Form = styled.form`
       width: 80rem;
     `}
     
-  overflow: hidden;
   font-size: 1.4rem;
   @media screen and (max-width: 576px) {
     font-size: 1.2rem;
@@ -34,22 +34,25 @@ Form.defaultProps = {
 };
 
 export const LabForm = styled.form`
-direction: ltr;
-@media screen and (max-width: 992px) {
+  direction: ltr;
+  overflow: auto;
+  @media screen and (max-width: 992px) {
     width: 60rem;
-}
-@media screen and (max-width: 776px) {
+    max-height: 90vh;
+    max-height: 90svh;
+  }
+  @media screen and (max-width: 776px) {
     width: 50rem;
-}
-@media screen and (max-width: 600px) {
+  }
+  @media screen and (max-width: 600px) {
     width: 40rem;
     max-height: 90vh;
     max-height: 90svh;
     overflow-y: auto;
-}
-@media screen and (max-width: 480px) {
+  }
+  @media screen and (max-width: 480px) {
     width: 25rem;
-}
+  }
 
   @media screen and (max-width: 576px) {
     padding: 2.4rem 2rem;
@@ -72,7 +75,6 @@ direction: ltr;
       width: 87rem;
     `}
     
-  overflow: hidden;
   font-size: 1.4rem;
   @media screen and (max-width: 576px) {
     font-size: 1.2rem;

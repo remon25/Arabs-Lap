@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { getUserRole } from "../../services/apiAuth";
 
 const Row = styled.div`
   display: grid;
@@ -55,7 +56,7 @@ export default function UserRow({ user }) {
       <User>{user.email}</User>
       <div></div>
       <Img src={image} />
-      <div></div>
+      <div>{getUserRole(user.id) === 1 ? "مدير" : "مستخدم"}</div>
     </Row>
   );
 }

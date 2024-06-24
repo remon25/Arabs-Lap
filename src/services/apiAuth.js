@@ -114,3 +114,11 @@ export async function fetchAllUsers() {
   return null;
 }
 
+// export async function makeAdmin(user_id) {
+//   const { data, error } = await supabase
+//     .from("user_roles")
+//     .insert([{ user_id: user_id, role_id: 1 }])
+//     .select();
+//   return data;
+// }
+
