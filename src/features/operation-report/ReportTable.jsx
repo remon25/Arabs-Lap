@@ -83,6 +83,13 @@ const StyledTable = styled.div`
       font-size: 0.8em;
       text-align: left;
     }
+    table td:last-child {
+      text-align: right;
+      direction: ltr;
+    }
+    table td:last-child::before {
+      float: left;
+    }
 
     table td::before {
       content: attr(data-label);
