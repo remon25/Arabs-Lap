@@ -34,12 +34,13 @@ Form.defaultProps = {
 };
 
 export const LabForm = styled.form`
+  max-height: 90vh;
+  max-height: 90svh;
+  width: 50rem;
   direction: ltr;
-  overflow: auto;
+  overflow-y: auto;
   @media screen and (max-width: 992px) {
     width: 60rem;
-    max-height: 90vh;
-    max-height: 90svh;
   }
   @media screen and (max-width: 776px) {
     width: 50rem;
@@ -72,7 +73,7 @@ export const LabForm = styled.form`
   ${(props) =>
     props.type === "modal" &&
     css`
-      width: 87rem;
+      width: 90rem;
     `}
     
   font-size: 1.4rem;
