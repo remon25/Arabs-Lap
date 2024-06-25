@@ -12,7 +12,7 @@ export function useGetLabSingleReport() {
     data: labReport,
     error,
   } = useQuery({
-    queryKey: ["lab-single-report", id],
+    queryKey: ["lab-report", id],
     queryFn,
     retry: false,
   });

@@ -73,7 +73,7 @@ export const LabForm = styled.form`
   ${(props) =>
     props.type === "modal" &&
     css`
-      width: 90rem;
+      width: auto;
     `}
     
   font-size: 1.4rem;
