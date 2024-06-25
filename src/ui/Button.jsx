@@ -11,6 +11,7 @@ const sizes = {
   medium: css`
   @media screen and (max-width:576px){
     font-size: 1.1rem;
+    padding: 1.2rem 1rem;
   }
     font-size: 1.4rem;
     padding: 1.2rem 1.6rem;
@@ -59,6 +60,7 @@ const Button = styled.button`
 
   ${(props) => sizes[props.size]}
   ${(props) => variations[props.variation]}
+
 `;
 
 Button.defaultProps = {

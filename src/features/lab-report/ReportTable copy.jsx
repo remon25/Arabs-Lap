@@ -1,21 +1,28 @@
 import { useMemo, useState } from "react";
 import Spinner from "../../ui/Spinner.jsx";
 import { useGetLabReport } from "./useGetLabReport.js";
+import { useRoles } from "../authentication/useGetRoles.js";
 import { useNavigate } from "react-router-dom";
 import { useTable, useSortBy, usePagination } from "react-table";
+import { useDeleteLabReport } from "./useDeleteLabReport.js";
 import Menus from "../../ui/Menus.jsx";
 import Input from "../../ui/Input";
 import Empty from "../../ui/Empty.jsx";
 import styled from "styled-components";
+import Modal from "../../ui/Modal";
 import {
   HiChevronDoubleLeft,
   HiChevronDoubleRight,
   HiChevronLeft,
   HiChevronRight,
+  HiPencil,
 } from "react-icons/hi2";
-
+import { HiOutlineTrash } from "react-icons/hi2";
+import CreateLabReportForm from "./CreateLabReportForm.jsx";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 import Button from "../../ui/Button.jsx";
 
+// Styled component to handle overflow
 const StyledTable = styled.div`
   overflow-x: auto;
   .table-caption {
@@ -30,7 +37,7 @@ const StyledTable = styled.div`
   td {
     padding: 8px;
     border: 1px solid #ddd;
-    word-wrap: break-word;
+    word-wrap: break-word; /* Handle long content */
   }
 
   th {
@@ -40,11 +47,8 @@ const StyledTable = styled.div`
   .mobile-sort {
     display: none;
   }
-  .details {
-    text-align: center;
-  }
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: 1556px) {
     .table-caption {
       display: block;
     }
@@ -98,10 +102,6 @@ const StyledTable = styled.div`
 
     table td:last-child {
       border-bottom: 0;
-    }
-    .details {
-      text-align: right;
-      direction: rtl;
     }
   }
 `;
@@ -171,7 +171,9 @@ const StyledSelect = styled.select`
 `;
 
 export default function ReportTable() {
+  const { isAdmin } = useRoles();
   const { isLoading, labReports } = useGetLabReport();
+  const { isDeleting, mutate } = useDeleteLabReport();
 
   const [dateFilter, setDateFilter] = useState("");
   const navigate = useNavigate();
@@ -180,26 +182,100 @@ export default function ReportTable() {
 
   const columns = useMemo(() => {
     const baseColumns = [
-      { Header: "Sample ID", accessor: "id" },
+      //   { Header: "Turbidity Inlet", accessor: "turbidity_inlet" },
+      //   { Header: "Turbidity Outlet", accessor: "turbidity_outlet" },
+      //   { Header: "TDS Inlet", accessor: "TDS_inlet" },
+      //   { Header: "TDS Outlet", accessor: "TDS_outlet" },
+      //   { Header: "Temp Inlet", accessor: "temp_inlet" },
+      //   { Header: "Temp Outlet", accessor: "temp_outlet" },
+      //   { Header: "Conductivity Inlet", accessor: "conductivity_inlet" },
+      //   { Header: "Conductivity Outlet", accessor: "conductivity_outlet" },
+      //   { Header: "PH Inlet", accessor: "PH_inlet" },
+      //   { Header: "PH Outlet", accessor: "PH_outlet" },
+      //   { Header: "Iron Inlet", accessor: "iron_inlet" },
+      //   { Header: "Iron Outlet", accessor: "iron_outlet" },
+      { Header: "رقم التقرير", accessor: "id" },
       { Header: "Sample Date", accessor: "sample_date" },
       { Header: "Notes", accessor: "notes" },
       { Header: "Writer", accessor: "sample_writer" },
     ];
-    baseColumns.push({
-      Header: " Details",
-      accessor: "details",
-      Cell: ({ row }) => {
-        return (
-          <div className="details">
-            <Button onClick={() => navigate(`/lab-report/${row.original.id}`)}>
-              التفاصيل
-            </Button>
-          </div>
-        );
-      },
-    });
+
+    // if (isAdmin) {
+    //   baseColumns.push({
+    //     Header: "تعديل / حذف",
+    //     accessor: "edit_delete",
+    //     Cell: ({ row }) => {
+    //       return (
+    //         <div className="edit-delete_operations">
+    //           <Modal>
+    //             <Menus.Menu>
+    //               <Menus.Toggle id={row.original.id} />
+    //               <Menus.List id={row.original.id}>
+    //                 <Modal.Open opens="edit">
+    //                   <Menus.Button icon={<HiPencil />}>تعديل</Menus.Button>
+    //                 </Modal.Open>
+
+    //                 <Modal.Open opens="delete">
+    //                   <Menus.Button icon={<HiOutlineTrash />}>حذف</Menus.Button>
+    //                 </Modal.Open>
+    //               </Menus.List>
+    //             </Menus.Menu>
+    //             <Modal.Window name="edit">
+    //               <CreateLabReportForm labReportToEdit={row.original} />
+    //             </Modal.Window>
+    //             <Modal.Window name="delete">
+    //               <ConfirmDelete
+    //                 resourceName={"التقرير"}
+    //                 disabled={isDeleting}
+    //                 onConfirm={() => mutate(row.original.id)}
+    //               />
+    //             </Modal.Window>
+    //           </Modal>
+    //         </div>
+    //       );
+    //     },
+    //   });
+    // }
+    if (isAdmin) {
+      baseColumns.push({
+        Header: "مشاهدة التفاصيل",
+        accessor: "details",
+        Cell: ({ row }) => {
+          return (
+            <div className="edit-delete_operations" style={{ textAlign: "center" }}>
+              {/* <Modal>
+                <Menus.Menu>
+                  <Menus.Toggle id={row.original.id} />
+                  <Menus.List id={row.original.id}>
+                    <Modal.Open opens="edit">
+                      <Menus.Button icon={<HiPencil />}>تعديل</Menus.Button>
+                    </Modal.Open>
+
+                    <Modal.Open opens="delete">
+                      <Menus.Button icon={<HiOutlineTrash />}>حذف</Menus.Button>
+                    </Modal.Open>
+                  </Menus.List>
+                </Menus.Menu>
+                <Modal.Window name="edit">
+                  <CreateLabReportForm labReportToEdit={row.original} />
+                </Modal.Window>
+                <Modal.Window name="delete">
+                  <ConfirmDelete
+                    resourceName={"التقرير"}
+                    disabled={isDeleting}
+                    onConfirm={() => mutate(row.original.id)}
+                  />
+                </Modal.Window>
+              </Modal> */}
+              <Button onClick={()=> navigate(`/lab-report/${row.original.id}`)}>التفاصيل</Button>
+            </div>
+          );
+        },
+      });
+    }
+
     return baseColumns;
-  }, [navigate]);
+  }, [isAdmin, isDeleting, mutate]);
 
   const filteredData = useMemo(() => {
     if (!dateFilter) return labReports;

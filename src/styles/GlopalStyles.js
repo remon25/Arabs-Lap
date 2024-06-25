@@ -1,10 +1,6 @@
 import { createGlobalStyle } from "styled-components";
 
 const GlopalStyles = createGlobalStyle`
-@font-face {
-  font-family:'kufi' ;
-  src: url('./fonts/DroidKufi-Regular.woff2') format('woff2'),;
-}
 :root {
    
 
@@ -122,7 +118,7 @@ const GlopalStyles = createGlobalStyle`
   }
   
   body {
-    font-family: "kufi", sans-serif;
+    font-family: "Noto Kufi Arabic", sans-serif;
     color: var(--color-grey-700);
     transition: color 0.3s, background-color 0.3s;
     min-height: 100vh;

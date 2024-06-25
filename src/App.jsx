@@ -5,6 +5,7 @@ import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Dashboard from "./pages/Dashboard";
 import OperationReport from "./pages/OperationReport";
 import LabReport from "./pages/LabReport";
+import SingleLabReport from "./pages/SingleLabReport";
 import Users from "./pages/Users";
 import Settings from "./pages/Settings";
 import Account from "./pages/Account";
@@ -42,8 +43,9 @@ function App() {
             >
               <Route index element={<Navigate replace to="dashboard" />} />
               <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/تقرير-التشغيل" element={<OperationReport />} />
-              <Route path="/تقرير-المختبر" element={<LabReport />} />
+              <Route path="/operation-report" element={<OperationReport />} />
+              <Route path="/lab-report" element={<LabReport />} />
+              <Route path="/lab-report/:id" element={<SingleLabReport />} />
               <Route path="/users" element={<Users />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/account" element={<Account />} />

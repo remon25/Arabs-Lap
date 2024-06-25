@@ -53,7 +53,7 @@ direction: ltr;
   ${(props) =>
     props.type === "modal" &&
     css`
-      width: 80rem;
+      width: auto;
     `}
     
   overflow: hidden;

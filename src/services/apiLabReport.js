@@ -1,9 +1,7 @@
 import supabase, { supabaseAdmin } from "./supabase";
 
-
-
 export async function getUserId() {
-  const { data:  user  } = await supabase.auth.getUser();
+  const { data: user } = await supabase.auth.getUser();
   return user.user.id;
 }
 
@@ -22,9 +20,8 @@ export async function getLabReport() {
     const finalData = await Promise.all(
       data.map(async (item) => {
         const userId = item.sample_writer;
-        const { data: user, error: userError } = await supabaseAdmin.auth.admin.getUserById(
-          userId
-        );
+        const { data: user, error: userError } =
+          await supabaseAdmin.auth.admin.getUserById(userId);
         if (userError) {
           throw new Error(userError.message);
         }
@@ -38,9 +35,40 @@ export async function getLabReport() {
     throw new Error(error.message);
   }
 }
+export async function getLabSingleReport(id) {
+  try {
+    const { data, error } = await supabase
+      .from("lab_report")
+      .select("*")
+      .eq("id", id)
+      .single();
 
+    if (error) {
+      throw new Error(error.message);
+    }
 
+    if (data.length === 0) {
+      throw new Error("No lab report found.");
+    }
 
+    const finalData = await Promise.all(
+      [data].map(async (item) => {
+        const userId = item.sample_writer;
+        const { data: user, error: userError } =
+          await supabaseAdmin.auth.admin.getUserById(userId);
+        if (userError) {
+          throw new Error(userError.message);
+        }
+        return { ...item, sample_writer: user?.user.user_metadata?.fullName };
+      })
+    );
+    console.log(finalData[0],"finalData");
+    return finalData[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
+getLabSingleReport(118);
 export async function createEditLabReport(newLabReport, id) {
   // 1. Create/edit cabin
 
@@ -64,7 +92,7 @@ export async function createEditLabReport(newLabReport, id) {
     throw new Error("فشل في حفظ التقرير");
   }
 
-  console.log("postdata",data);
+  console.log("postdata", data);
   return data;
 }
 
@@ -79,15 +107,12 @@ export async function deleteLabReport(id) {
   return data;
 }
 
-
-export async function editLabreportApi(editedData,id){
-
+export async function editLabreportApi(editedData, id) {
   const { data, error } = await supabase
-  .from('lab_report')
-  .update({ ...editedData })
-  .eq('id', id)
-  .select()
-  console.log(editedData,id)
+    .from("lab_report")
+    .update({ ...editedData })
+    .eq("id", id)
+    .select();
+  console.log(editedData, id);
   return data;
 }
-

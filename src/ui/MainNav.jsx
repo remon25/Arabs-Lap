@@ -87,13 +87,13 @@ export default function MainNav() {
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/تقرير-التشغيل" onClick={closeSidebar}>
+          <StyledNavLink to="/operation-report" onClick={closeSidebar}>
             <HiOutlineCalendar />
             <span> تقرير التشغيل</span>
           </StyledNavLink>
         </li>
         <li>
-          <StyledNavLink to="/تقرير-المختبر" onClick={closeSidebar}>
+          <StyledNavLink to="/lab-report" onClick={closeSidebar}>
             <ImLab />
             <span>تقرير المختبر</span>
           </StyledNavLink>
