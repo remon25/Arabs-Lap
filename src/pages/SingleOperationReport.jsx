@@ -56,7 +56,7 @@ const SingleOperationReport = () => {
     <>
       <Row type="horizontal">
         <HeadingGroup>
-          <Heading as="h1">تقرير مختبر رقم {operationReport?.id}</Heading>
+          <Heading as="h1">تقرير تشغيل رقم {operationReport?.id}</Heading>
         </HeadingGroup>
         <ButtonText onClick={moveBack}>&larr; رجوع</ButtonText>
       </Row>
