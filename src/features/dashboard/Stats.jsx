@@ -1,58 +1,54 @@
 import Stat from "./Stat";
 import {
-  HiOutlineBanknotes,
-  HiOutlineBriefcase,
-  HiOutlineCalendarDays,
   HiOutlineChartBar,
 } from "react-icons/hi2";
-import { formatCurrency } from "../../utils/helpers";
+import { ImLab } from "react-icons/im";
+import { TbReportAnalytics } from "react-icons/tb";
+import { FaUsersBetweenLines } from "react-icons/fa6";
+
+
 
 export default function Stats({
-  booking,
-  confirmedStays,
-  numDays,
-  cabinsCount,
+  users,
+  totalReports,
+  labReports,
+  operationReports,
 }) {
   // 1.
-  const numBooking = booking?.length;
-
-  // 2.
-  const sales = booking.reduce((acc, cur) => acc + cur.totalPrice, 0);
+  const numUsers = users?.length;
 
   // 3.
-  const checkins = confirmedStays.length;
+  const numOperationReports = operationReports?.length;
 
   // 4.
 
-  const occupation =
-    confirmedStays.reduce((acc, cur) => acc + cur.numNights, 0) /
-    (numDays * cabinsCount);
+  const numLapReports = labReports?.length;
 
   return (
     <>
       <Stat
-        title="Bookings"
+        title="المستخدمين"
         color="blue"
-        icon={<HiOutlineBriefcase />}
-        value={numBooking}
+        icon={<FaUsersBetweenLines />}
+        value={numUsers}
       />
       <Stat
-        title="Sales"
+        title="إجمالي التقارير"
         color="green"
-        icon={<HiOutlineBanknotes />}
-        value={formatCurrency(sales)}
-      />
-      <Stat
-        title="Check ins"
-        color="indigo"
-        icon={<HiOutlineCalendarDays />}
-        value={checkins}
-      />
-      <Stat
-        title="Occupancy rate"
-        color="yellow"
         icon={<HiOutlineChartBar />}
-        value={Math.round(occupation * 100) + "%"}
+        value={totalReports}
+      />
+      <Stat
+        title="تقارير التشغيل"
+        color="indigo"
+        icon={<TbReportAnalytics />}
+        value={numOperationReports}
+      />
+      <Stat
+        title="تقارير المختبر"
+        color="yellow"
+        icon={<ImLab />}
+        value={numLapReports}
       />
     </>
   );

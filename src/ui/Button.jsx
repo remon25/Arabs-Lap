@@ -7,12 +7,15 @@ const sizes = {
     text-transform: uppercase;
     font-weight: 600;
     text-align: center;
+    @media screen and (max-width: 576px) {
+      font-size: 0.8rem;
+    }
   `,
   medium: css`
-  @media screen and (max-width:576px){
-    font-size: 1.1rem;
-    padding: 1.2rem 1rem;
-  }
+    @media screen and (max-width: 576px) {
+      font-size: 1.1rem;
+      padding: 1.2rem 1rem;
+    }
     font-size: 1.4rem;
     padding: 1.2rem 1.6rem;
     font-weight: 500;
@@ -52,7 +55,6 @@ const variations = {
   `,
 };
 
-
 const Button = styled.button`
   border: none;
   border-radius: var(--border-radius-sm);
@@ -60,7 +62,6 @@ const Button = styled.button`
 
   ${(props) => sizes[props.size]}
   ${(props) => variations[props.variation]}
-
 `;
 
 Button.defaultProps = {

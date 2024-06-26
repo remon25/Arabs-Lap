@@ -1,4 +1,5 @@
 import supabase, { supabaseAdmin } from "./supabase";
+import { getToday } from "../utils/helpers";
 
 export async function getUserId() {
   const { data: user } = await supabase.auth.getUser();
@@ -107,11 +108,39 @@ export async function deleteLabReport(id) {
 }
 
 export async function editLabreportApi(editedData, id) {
-  const { data, error } = await supabase
+  const { data } = await supabase
     .from("lab_report")
     .update({ ...editedData })
     .eq("id", id)
     .select();
   console.log(editedData, id);
   return data;
+}
+
+
+export async function getLapReportsToday() {
+  const today = getToday();
+  const { data, error } = await supabase
+    .from("lab_report")
+    .select('id,sample_writer')
+    .gte('created_at', `${today}T00:00:00`)
+    .lte('created_at', `${today}T23:59:59`)
+    .order("created_at");
+
+  if (error) {
+    throw new Error("Reports could not get loaded");
+  }
+  const finalData = await Promise.all(
+    data.map(async (item) => {
+      const userId = item.sample_writer;
+      const { data: user, error: userError } =
+        await supabaseAdmin.auth.admin.getUserById(userId);
+      if (userError) {
+        throw new Error(userError.message);
+      }
+      return { ...item, sample_writer: user?.user.user_metadata?.fullName };
+    })
+  );
+
+  return finalData;
 }

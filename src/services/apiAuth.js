@@ -8,17 +8,15 @@ export async function getUserRole(userId) {
     .single();
 
   if (error) {
-    console.error("Error fetching user role:", error);
-    return null;
+    return 2;
   }
-
+  
   const roleId = data?.role_id;
 
-  return roleId;
+  return roleId || 2;
 }
-
 export async function signUp({ fullName, email, password }) {
-  let { data, error } = await supabase.auth.signUp({
+  let { data } = await supabase.auth.signUp({
     email,
     password,
     options: {
@@ -107,18 +105,29 @@ export async function fetchAllUsers() {
     if (error) {
       throw error;
     }
-    return data;
+
+    // Fetch roles for each user
+    const usersWithRoles = await Promise.all(
+      data.users.map(async (user) => {
+        const role = await getUserRole(user.id);
+        return {
+          ...user,
+          role,
+        };
+      })
+    );
+    return usersWithRoles;
   } catch (error) {
     console.error("Error fetching users:", error.message);
   }
   return null;
 }
+fetchAllUsers()
 
-// export async function makeAdmin(user_id) {
-//   const { data, error } = await supabase
-//     .from("user_roles")
-//     .insert([{ user_id: user_id, role_id: 1 }])
-//     .select();
-//   return data;
-// }
-
+export async function makeAdmin(user_id) {
+  const { data } = await supabase
+    .from("user_roles")
+    .insert([{ user_id: user_id, role_id: 1 }])
+    .select();
+  return data;
+}

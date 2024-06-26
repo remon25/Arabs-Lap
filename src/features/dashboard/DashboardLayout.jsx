@@ -1,40 +1,66 @@
 import styled from "styled-components";
-import { useRecentBookings } from "./useRecentBookings";
-import { useRecentStays } from "./useRecentStays";
 import Spinner from "../../ui/Spinner.jsx";
 import Stats from "./Stats.jsx";
 import { useGetLabReport } from "../lab-report/useGetLabReport.js";
-import SalesChart from "./SalesChart.jsx";
-import DurationChart from "./DurationChart.jsx";
+import { fetchAllUsers } from "../../services/apiAuth.js";
+import { useQuery } from "@tanstack/react-query";
+import { useGetOperationReport } from "../operation-report/useGetOperationReport.js";
+import LabReportsActivity from "./LapReportsActivity.jsx";
+import OperationReportActivity from "./OperationReportActivity.jsx";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-template-rows: auto 34rem auto;
   gap: 2.4rem;
+  @media screen and (max-width: 1290px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  @media screen and (max-width: 480px) {
+    grid-template-columns: 1fr;
+  }
+`;
+const StyledDashboardLayoutTwo = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.4rem;
+  @media screen and (max-width: 1290px) {
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+  }
+  @media screen and (max-width: 992px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export default function DashboardLayout() {
-  const { isLoading: isLodingBooking, booking = [] } = useRecentBookings();
-  const {
-    isLoading: isLoadingStays,
-    confirmedStays = [],
-    numDays,
-  } = useRecentStays();
-  const { cabins = [] } = useGetLabReport();
+  const { isLoading, data: users } = useQuery({
+    queryKey: ["users"],
+    queryFn: fetchAllUsers,
+  });
 
-  if (isLodingBooking || isLoadingStays) return <Spinner />;
+  const { isLoading: isLoadingReports, labReports } = useGetLabReport();
+
+  const { isLoading: isLoadingOperationReports, operationReports } =
+    useGetOperationReport();
+  const totalReports = labReports?.length + operationReports?.length;
+  if (isLoading || isLoadingReports || isLoadingOperationReports)
+    return <Spinner />;
 
   return (
-    <StyledDashboardLayout>
-      <Stats
-        booking={booking}
-        confirmedStays={confirmedStays}
-        numDays={numDays}
-        cabinsCount={cabins.length}
-      />
-      <DurationChart confirmedStays={confirmedStays} />
-      <SalesChart booking={booking} numDays={numDays} />
-    </StyledDashboardLayout>
+    <>
+      <StyledDashboardLayout>
+        <Stats
+          users={users}
+          totalReports={totalReports}
+          labReports={labReports}
+          operationReports={operationReports}
+        />
+      </StyledDashboardLayout>
+      <StyledDashboardLayoutTwo>
+        <LabReportsActivity />
+        <OperationReportActivity />
+      </StyledDashboardLayoutTwo>
+    </>
   );
 }

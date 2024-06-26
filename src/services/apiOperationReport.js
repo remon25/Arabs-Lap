@@ -1,3 +1,4 @@
+import { getToday } from "../utils/helpers";
 import supabase, { supabaseAdmin } from "./supabase";
 
 
@@ -116,3 +117,34 @@ export async function editOperationreportApi(editedData,id){
   return data;
 }
 
+
+export async function getOperationReportsToday() {
+  const today = getToday();
+  const { data, error } = await supabase
+    .from("operation_report")
+    .select('id,writer')
+    .gte('created_at', `${today}T00:00:00`)
+    .lte('created_at', `${today}T23:59:59`)
+    .order("created_at");
+
+  if (error) {
+    throw new Error("Reports could not get loaded");
+  }
+  const finalData = await Promise.all(
+    data.map(async (item) => {
+      const userId = item.writer;
+      const { data: user, error: userError } =
+        await supabaseAdmin.auth.admin.getUserById(userId);
+      if (userError) {
+        throw new Error(userError.message);
+      }
+      return { ...item, writer: user?.user.user_metadata?.fullName };
+    })
+  );
+  console.log(finalData,"opeeeeee")
+
+  return finalData;
+}
+
+
+getOperationReportsToday()

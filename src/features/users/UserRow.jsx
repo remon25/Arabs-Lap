@@ -1,11 +1,12 @@
+import { useCreateAdmin } from "../authentication/useMakeAdmin";
 import styled from "styled-components";
-import { getUserRole } from "../../services/apiAuth";
-
+import Button from "../../ui/Button";
 const Row = styled.div`
   display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  grid-template-columns: 0.2fr 1.8fr 2.2fr 0.2fr 1fr 0.2fr;
   column-gap: 2.4rem;
   align-items: center;
+  justify-items: center;
   background-color: var(--color-grey-0);
   border-bottom: 1px solid var(--color-grey-100);
   letter-spacing: 0.4px;
@@ -16,10 +17,12 @@ const Row = styled.div`
     border: 0.5px solid #f5ecbc;
     border-radius: 4px;
   }
+  @media screen and (max-width: 992px) {
+    padding: 1.6rem 0.5rem;
+  }
   @media screen and (max-width: 480px) {
     column-gap: 0.5rem;
     padding: 1.6rem 1rem;
-
   }
 `;
 const Img = styled.img`
@@ -34,10 +37,14 @@ const Img = styled.img`
 `;
 
 const User = styled.div`
-  font-size: 1.6rem;
+  direction: ltr;
+  font-size: 1.4rem;
   font-weight: 600;
   color: var(--color-grey-600);
   font-family: "Sono";
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   @media screen and (max-width: 768px) {
     font-size: 1.2rem;
   }
@@ -48,15 +55,40 @@ const User = styled.div`
 
 export default function UserRow({ user }) {
   const image = user.user_metadata?.avatar || "/default-user.jpg";
+  const isAdmin = user.role === 1;
+  const { isAdding, createAdmin } = useCreateAdmin();
 
   return (
     <Row type="horizontal">
       <div></div>
-      <User>{user.user_metadata?.fullName}</User>
-      <User>{user.email}</User>
+      <User>
+        {user.user_metadata?.fullName}
+      </User>
+      <User style={{ width: "100%" }}>{user.email}</User>
       <div></div>
-      <Img src={image} />
-      <div>{getUserRole(user.id) === 1 ? "مدير" : "مستخدم"}</div>
+      <div
+        style={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "0.25rem",
+        }}
+      >
+        <Img src={image} />
+        {!isAdmin ? (
+          <Button
+            disabled={isAdding}
+            onClick={() => createAdmin(user.id)}
+            size="small"
+          >
+            Make Admin
+          </Button>
+        ) : (
+          <div style={{ fontSize: "1rem", color: "green", fontWeight: "bold" }}>
+            {isAdmin && "✔Admin"}
+          </div>
+        )}
+      </div>
     </Row>
   );
 }

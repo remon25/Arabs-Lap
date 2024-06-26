@@ -6,19 +6,18 @@ import UserRow from "./UserRow.jsx";
 
 const Table = styled.div`
   border: 1px solid var(--color-grey-200);
-
-  font-size: 1.4rem;
+  font-size: 1.2rem;
   background-color: var(--color-grey-0);
   border-radius: 7px;
   overflow: hidden;
+  text-align: center;
 `;
 
 const TableHeader = styled.header`
   display: grid;
-  grid-template-columns: 0.6fr 1.8fr 2.2fr 1fr 1fr 1fr;
+  grid-template-columns: 0.2fr 1.8fr 2.2fr 0.2fr 1fr 0.2fr;
   column-gap: 2.4rem;
   align-items: center;
-
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
   text-transform: uppercase;
@@ -27,7 +26,8 @@ const TableHeader = styled.header`
   color: var(--color-grey-600);
   padding: 1.6rem 2.4rem;
   @media screen and (max-width: 992px) {
-    font-size: 0.8rem;
+    font-size: 1rem;
+    padding: 1.6rem 0.5rem;
     
   }
   @media screen and (max-width: 480px) {
@@ -56,9 +56,9 @@ export default function UsersTable() {
         <div>الصورة</div>
         <div></div>
       </TableHeader>
-      {[...users.users].reverse().map((user) => (
+      {users.map((user) => (
         <UserRow user={user} key={user.id}/>
-      ))}
+      )).reverse()}
     </Table>
   );
 }

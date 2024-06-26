@@ -7,7 +7,6 @@ import {
   HiOutlineHome,
   HiOutlineCalendar,
   HiOutlineUsers,
-  HiOutlineCog6Tooth,
   HiOutlineUser,
   HiArrowRightOnRectangle,
 } from "react-icons/hi2";
@@ -118,12 +117,6 @@ export default function MainNav() {
           <StyledNavLink to="/account" onClick={closeSidebar}>
             <HiOutlineUser />
             <span>الحساب</span>
-          </StyledNavLink>
-        </li>
-        <li>
-          <StyledNavLink to="/settings" onClick={closeSidebar}>
-            <HiOutlineCog6Tooth />
-            <span>الإعدادات</span>
           </StyledNavLink>
         </li>
         <li style={{ marginTop: "25px" }}>
