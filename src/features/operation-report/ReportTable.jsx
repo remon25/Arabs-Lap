@@ -103,6 +103,12 @@ const StyledTable = styled.div`
 
     table td:last-child {
       border-bottom: 0;
+      @media screen and (max-width: 992px) {
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: center;
+        justify-content: space-between;
+      }
     }
   }
 `;
@@ -178,7 +184,7 @@ export default function ReportTable() {
     const baseColumns = [
       { Header: "ID", accessor: "id" },
       { Header: "التاريخ", accessor: "التاريخ" },
-      { Header: "ملاحظ", accessor: "ملاحظ" },
+      { Header: "ملاحظ", accessor: "ملاحظ",Cell: ({ value }) => value ? value : "لاملاحظات" },
       { Header: "الكاتب", accessor: "writer" },
     ];
 

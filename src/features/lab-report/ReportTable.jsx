@@ -188,7 +188,11 @@ export default function ReportTable() {
     const baseColumns = [
       { Header: "Sample ID", accessor: "id" },
       { Header: "Sample Date", accessor: "sample_date" },
-      { Header: "Notes", accessor: "notes" },
+      { 
+        Header: "Notes", 
+        accessor: "notes",
+        Cell: ({ value }) => value ? value : "لاملاحظات"
+      },
       { Header: "Writer", accessor: "sample_writer" },
     ];
     baseColumns.push({
