@@ -126,7 +126,7 @@ const SingleLabReport = () => {
         </Row>
         <Row type="horizontal">
           <p style={{ marginTop: "20px" }} className="sample_notes">
-            ملاحظات : {labReport?.notes}
+            ملاحظات : {labReport?.notes || "لا ملاحظات"} 
           </p>
         </Row>
       </div>

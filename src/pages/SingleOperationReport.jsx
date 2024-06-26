@@ -142,7 +142,7 @@ const SingleOperationReport = () => {
         </Row>
         <Row type="horizontal">
           <p style={{ marginTop: "20px" }} className="sample_notes">
-            ملاحظات : {operationReport?.ملاحظ}
+            ملاحظات : {operationReport?.ملاحظ || "لا ملاحظات"}
           </p>
         </Row>
       </div>
