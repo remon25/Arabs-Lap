@@ -1,9 +1,8 @@
 import { useState, useMemo } from "react";
 import Spinner from "../../ui/Spinner.jsx";
 import { useGetOperationReport } from "./useGetOperationReport.js";
-import { useRoles } from "../authentication/useGetRoles.js";
+import { useNavigate } from "react-router-dom";
 import { useTable, useSortBy, usePagination } from "react-table";
-import { useDeleteOperationReport } from "./useDeleteOperationReport.js";
 import Menus from "../../ui/Menus.jsx";
 import Input from "../../ui/Input";
 import {
@@ -11,14 +10,10 @@ import {
   HiChevronDoubleRight,
   HiChevronLeft,
   HiChevronRight,
-  HiPencil,
 } from "react-icons/hi2";
 import Empty from "../../ui/Empty.jsx";
 import styled from "styled-components";
-import Modal from "../../ui/Modal";
-import { HiOutlineTrash } from "react-icons/hi2";
-import CreateOperationReportForm from "./CreateOperationReportForm.jsx";
-import ConfirmDelete from "../../ui/ConfirmDelete";
+import Button from "../../ui/Button.jsx";
 
 // Styled component to handle overflow
 const StyledTable = styled.div`
@@ -36,17 +31,18 @@ const StyledTable = styled.div`
     padding: 8px;
     border: 1px solid #ddd;
     word-wrap: break-word; /* Handle long content */
+    text-align: center;
   }
-
-  th {
-    background-color: #f4f4f4;
+  thead {
+    background-color: var(--color-grey-50);
+    border-bottom: 1px solid var(--color-grey-900);
   }
 
   .mobile-sort {
     display: none;
   }
 
-  @media screen and (max-width: 1556px) {
+  @media screen and (max-width: 992px) {
     .table-caption {
       display: block;
     }
@@ -113,7 +109,7 @@ const StyledTable = styled.div`
 
 const StyledHead = styled.th`
   background-color: var(--color-grey-50) !important;
-  border-bottom: 1px solid var(--color-grey-100) !important;
+  border-bottom: 1px solid var(--color-grey-300) !important;
 `;
 const StyledPagination = styled.div`
   direction: ltr;
@@ -174,70 +170,36 @@ const StyledSelect = styled.select`
 `;
 
 export default function ReportTable() {
-  const { isAdmin } = useRoles();
   const { isLoading, operationReports } = useGetOperationReport();
-  const { isDeleting, mutate } = useDeleteOperationReport();
   const [dateFilter, setDateFilter] = useState("");
+  const navigate = useNavigate();
 
   const columns = useMemo(() => {
     const baseColumns = [
+      { Header: "ID", accessor: "id" },
       { Header: "التاريخ", accessor: "التاريخ" },
-      { Header: "اسم القروب", accessor: "اسم القروب" },
-      { Header: "وقت القروب", accessor: "وقت القروب" },
-      { Header: "التشغيل", accessor: "التشغيل" },
-      { Header: "المولدات", accessor: "المولدات" },
-      { Header: "كمية المياه الخام", accessor: "كمية المياه الخام" },
-      { Header: "كمية الانتاج الفعلي", accessor: "كمية الانتاج الفعلي" },
-      { Header: "كمية التصدير خليص", accessor: "كمية التصدير خليص" },
-      { Header: "كمية التصدير الكامل", accessor: "كمية التصدير الكامل" },
-      { Header: "مدة التشغيل", accessor: "مدة التشغيل" },
-      { Header: "من الساعة", accessor: "من الساعة" },
-      { Header: "الى الساعة", accessor: "الى الساعة" },
       { Header: "ملاحظ", accessor: "ملاحظ" },
       { Header: "الكاتب", accessor: "writer" },
     ];
 
-    if (isAdmin) {
-      baseColumns.push({
-        Header: "تعديل / حذف",
-        accessor: "edit_delete",
-        Cell: ({ row }) => {
-          return (
-            <div className="edit-delete_operations">
-              <Modal>
-                <Menus.Menu>
-                  <Menus.Toggle id={row.original.id} />
-                  <Menus.List id={row.original.id}>
-                    <Modal.Open opens="edit">
-                      <Menus.Button icon={<HiPencil />}>تعديل</Menus.Button>
-                    </Modal.Open>
-
-                    <Modal.Open opens="delete">
-                      <Menus.Button icon={<HiOutlineTrash />}>حذف</Menus.Button>
-                    </Modal.Open>
-                  </Menus.List>
-                </Menus.Menu>
-                <Modal.Window name="edit">
-                  <CreateOperationReportForm
-                    operationReportToEdit={row.original}
-                  />
-                </Modal.Window>
-                <Modal.Window name="delete">
-                  <ConfirmDelete
-                    resourceName={"التقرير"}
-                    disabled={isDeleting}
-                    onConfirm={() => mutate(row.original.id)}
-                  />
-                </Modal.Window>
-              </Modal>
-            </div>
-          );
-        },
-      });
-    }
+    baseColumns.push({
+      Header: "التفاصيل",
+      accessor: "edit_delete",
+      Cell: ({ row }) => {
+        return (
+          <div className="details">
+            <Button
+              onClick={() => navigate(`/operation-report/${row.original.id}`)}
+            >
+              التفاصيل
+            </Button>
+          </div>
+        );
+      },
+    });
 
     return baseColumns;
-  }, [isAdmin, isDeleting, mutate]);
+  }, [navigate]);
 
   const filteredData = useMemo(() => {
     if (!dateFilter) return operationReports;

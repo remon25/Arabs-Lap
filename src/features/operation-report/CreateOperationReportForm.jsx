@@ -1,5 +1,5 @@
 import LapReportInput from "../../ui/LapReportInput";
-import { LabForm } from "../../ui/LabReportForm";
+import { OperationForm } from "../../ui/LabReportForm";
 import Button from "../../ui/Button";
 import Textarea from "../../ui/Textarea";
 import { useForm } from "react-hook-form";
@@ -67,7 +67,7 @@ function CreateOperationReportForm({ operationReportToEdit = {}, onClose }) {
   function onError(errors) {}
 
   return (
-    <LabForm
+    <OperationForm
       onSubmit={handleSubmit(onSubmit, onError)}
       type={onClose ? "modal" : "regular"}
       style={{ direction: "rtl" }}
@@ -100,6 +100,8 @@ function CreateOperationReportForm({ operationReportToEdit = {}, onClose }) {
         />
       </OperationReportFormRow>
       <SingleRow error={errors?.message}>
+      <StyledH4>التشغيل</StyledH4>
+
         <Textarea
           type="text"
           id="operation"
@@ -111,6 +113,7 @@ function CreateOperationReportForm({ operationReportToEdit = {}, onClose }) {
         />
       </SingleRow>
       <SingleRow error={errors?.message}>
+      <StyledH4>المولدات</StyledH4>
         <Textarea
           type="text"
           id="generators"
@@ -228,7 +231,7 @@ function CreateOperationReportForm({ operationReportToEdit = {}, onClose }) {
           {isEditSession ? "تعديل التقرير" : "اضف تقرير"}
         </Button>
       </LabReportFormRow>
-    </LabForm>
+    </OperationForm>
   );
 }
 

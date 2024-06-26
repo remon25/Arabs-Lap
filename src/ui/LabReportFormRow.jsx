@@ -136,7 +136,7 @@ export  function OperationReportFormRow({children, error }) {
 }
 export  function SingleRow({children, error }) {
   return (
-    <StyledFormRow style={{gridTemplateColumns: '1fr'}}>
+    <StyledFormRow style={{gridTemplateColumns: '1fr',gap: '0.25rem'}}>
       {children}
       {error && <Error>{error}</Error>}
     </StyledFormRow>

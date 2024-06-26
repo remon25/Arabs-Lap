@@ -1,21 +1,26 @@
-import { useMemo, useState } from "react";
+import { useState, useMemo } from "react";
 import Spinner from "../../ui/Spinner.jsx";
-import { useGetLabReport } from "./useGetLabReport.js";
-import { useNavigate } from "react-router-dom";
+import { useGetOperationReport } from "./useGetOperationReport.js";
+import { useRoles } from "../authentication/useGetRoles.js";
 import { useTable, useSortBy, usePagination } from "react-table";
+import { useDeleteOperationReport } from "./useDeleteOperationReport.js";
 import Menus from "../../ui/Menus.jsx";
 import Input from "../../ui/Input";
-import Empty from "../../ui/Empty.jsx";
-import styled from "styled-components";
 import {
   HiChevronDoubleLeft,
   HiChevronDoubleRight,
   HiChevronLeft,
   HiChevronRight,
+  HiPencil,
 } from "react-icons/hi2";
+import Empty from "../../ui/Empty.jsx";
+import styled from "styled-components";
+import Modal from "../../ui/Modal";
+import { HiOutlineTrash } from "react-icons/hi2";
+import CreateOperationReportForm from "./CreateOperationReportForm.jsx";
+import ConfirmDelete from "../../ui/ConfirmDelete";
 
-import Button from "../../ui/Button.jsx";
-
+// Styled component to handle overflow
 const StyledTable = styled.div`
   overflow-x: auto;
   .table-caption {
@@ -30,8 +35,7 @@ const StyledTable = styled.div`
   td {
     padding: 8px;
     border: 1px solid #ddd;
-    word-wrap: break-word;
-    text-align: center;
+    word-wrap: break-word; /* Handle long content */
   }
 
   th {
@@ -41,11 +45,8 @@ const StyledTable = styled.div`
   .mobile-sort {
     display: none;
   }
-  .details {
-    text-align: center;
-  }
 
-  @media screen and (max-width: 992px) {
+  @media screen and (max-width: 1556px) {
     .table-caption {
       display: block;
     }
@@ -87,36 +88,33 @@ const StyledTable = styled.div`
       border-bottom: 1px solid #ddd;
       display: block;
       font-size: 0.8em;
+      text-align: left;
+    }
+    table td:last-child {
       text-align: right;
+      direction: ltr;
+    }
+    table td:last-child::before {
+      float: left;
     }
 
     table td::before {
       content: attr(data-label);
-      float: left;
+      float: right;
       font-weight: bold;
       text-transform: uppercase;
     }
 
     table td:last-child {
       border-bottom: 0;
-      @media screen and (max-width: 992px) {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-    }
-    .details {
-      text-align: right;
-      direction: rtl;
     }
   }
 `;
 
 const StyledHead = styled.th`
   background-color: var(--color-grey-50) !important;
-  border-bottom: 1px solid var(--color-grey-300) !important;
+  border-bottom: 1px solid var(--color-grey-100) !important;
 `;
-
 const StyledPagination = styled.div`
   direction: ltr;
   display: flex;
@@ -127,7 +125,6 @@ const StyledPagination = styled.div`
     grid-template-columns: 1fr;
   }
 `;
-
 const PaginationButton = styled.button`
   background-color: ${(props) =>
     props.active ? " var(--color-brand-600)" : "var(--color-grey-50)"};
@@ -177,48 +174,81 @@ const StyledSelect = styled.select`
 `;
 
 export default function ReportTable() {
-  const { isLoading, labReports } = useGetLabReport();
-
+  const { isAdmin } = useRoles();
+  const { isLoading, operationReports } = useGetOperationReport();
+  const { isDeleting, mutate } = useDeleteOperationReport();
   const [dateFilter, setDateFilter] = useState("");
-  const navigate = useNavigate();
-
-  console.log("labReports:", labReports);
 
   const columns = useMemo(() => {
     const baseColumns = [
-      { Header: "Sample ID", accessor: "id" },
-      { Header: "Sample Date", accessor: "sample_date" },
-      { Header: "Notes", accessor: "notes" },
-      { Header: "Writer", accessor: "sample_writer" },
+      { Header: "التاريخ", accessor: "التاريخ" },
+      { Header: "اسم القروب", accessor: "اسم القروب" },
+      { Header: "وقت القروب", accessor: "وقت القروب" },
+      { Header: "التشغيل", accessor: "التشغيل" },
+      { Header: "المولدات", accessor: "المولدات" },
+      { Header: "كمية المياه الخام", accessor: "كمية المياه الخام" },
+      { Header: "كمية الانتاج الفعلي", accessor: "كمية الانتاج الفعلي" },
+      { Header: "كمية التصدير خليص", accessor: "كمية التصدير خليص" },
+      { Header: "كمية التصدير الكامل", accessor: "كمية التصدير الكامل" },
+      { Header: "مدة التشغيل", accessor: "مدة التشغيل" },
+      { Header: "من الساعة", accessor: "من الساعة" },
+      { Header: "الى الساعة", accessor: "الى الساعة" },
+      { Header: "ملاحظ", accessor: "ملاحظ" },
+      { Header: "الكاتب", accessor: "writer" },
     ];
-    baseColumns.push({
-      Header: " Details",
-      accessor: "details",
-      Cell: ({ row }) => {
-        return (
-          <div className="details">
-            <Button onClick={() => navigate(`/lab-report/${row.original.id}`)}>
-              التفاصيل
-            </Button>
-          </div>
-        );
-      },
-    });
+
+    if (isAdmin) {
+      baseColumns.push({
+        Header: "تعديل / حذف",
+        accessor: "edit_delete",
+        Cell: ({ row }) => {
+          return (
+            <div className="edit-delete_operations">
+              <Modal>
+                <Menus.Menu>
+                  <Menus.Toggle id={row.original.id} />
+                  <Menus.List id={row.original.id}>
+                    <Modal.Open opens="edit">
+                      <Menus.Button icon={<HiPencil />}>تعديل</Menus.Button>
+                    </Modal.Open>
+
+                    <Modal.Open opens="delete">
+                      <Menus.Button icon={<HiOutlineTrash />}>حذف</Menus.Button>
+                    </Modal.Open>
+                  </Menus.List>
+                </Menus.Menu>
+                <Modal.Window name="edit">
+                  <CreateOperationReportForm
+                    operationReportToEdit={row.original}
+                  />
+                </Modal.Window>
+                <Modal.Window name="delete">
+                  <ConfirmDelete
+                    resourceName={"التقرير"}
+                    disabled={isDeleting}
+                    onConfirm={() => mutate(row.original.id)}
+                  />
+                </Modal.Window>
+              </Modal>
+            </div>
+          );
+        },
+      });
+    }
+
     return baseColumns;
-  }, [navigate]);
+  }, [isAdmin, isDeleting, mutate]);
 
   const filteredData = useMemo(() => {
-    if (!dateFilter) return labReports;
-    return labReports.filter((report) => {
-      const reportDate = new Date(report.sample_date).toLocaleDateString(
-        "en-CA"
-      );
-      return reportDate.includes(dateFilter);
+    if (!dateFilter) return operationReports;
+    return operationReports.filter((report) => {
+      const reportDate = new Date(report.التاريخ).toISOString().split("T")[0];
+      const filterDate = new Date(dateFilter).toISOString().split("T")[0];
+      return reportDate === filterDate;
     });
-  }, [labReports, dateFilter]);
+  }, [dateFilter, operationReports]);
 
   const data = useMemo(() => {
-    // Ensure labReports is an array before passing it to useTable
     return Array.isArray(filteredData) ? filteredData : [];
   }, [filteredData]);
 
@@ -248,13 +278,12 @@ export default function ReportTable() {
   );
 
   if (isLoading) return <Spinner />;
-  if (!labReports || !labReports.length)
-    return <Empty resourceName="تقارير مختبر" />;
+  if (!operationReports || !operationReports.length)
+    return <Empty resourceName="تقارير التشغيل" />;
 
   return (
     <>
       <h4>البحث بالتاريخ </h4>
-
       <Input
         type="date"
         value={dateFilter}
@@ -274,7 +303,7 @@ export default function ReportTable() {
                   <div
                     key={column.id}
                     scope="col"
-                    {...column.getHeaderProps(column.getSortByToggleProps())}
+                    {...column.getSortByToggleProps()}
                   >
                     {column.render("Header")}
                     <span>
@@ -289,8 +318,8 @@ export default function ReportTable() {
               </div>
             ))}
           </div>
-          <table style={{ direction: "ltr" }} {...getTableProps()}>
-            <caption className="table-caption">تقارير المختبر</caption>
+          <table style={{ direction: "rtl" }} {...getTableProps()}>
+            <caption className="table-caption">تقارير التشغيل</caption>
             <thead>
               {headerGroups.map((headerGroup, headerGroupIndex) => (
                 <tr
@@ -299,7 +328,7 @@ export default function ReportTable() {
                 >
                   {headerGroup.headers.map((column, columnIndex) => (
                     <StyledHead
-                      {...column.getHeaderProps(column.getSortByToggleProps())}
+                      {...column.getSortByToggleProps()}
                       key={columnIndex}
                     >
                       {column.render("Header")}

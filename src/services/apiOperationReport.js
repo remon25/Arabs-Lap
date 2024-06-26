@@ -40,8 +40,39 @@ export async function getOperationReport() {
 }
 
 
-getOperationReport();
+export async function getOperationSingleReport(id) {
+  try {
+    const { data, error } = await supabase
+      .from("operation_report")
+      .select("*")
+      .eq("id", id)
+      .single();
 
+    if (error) {
+      throw new Error(error.message);
+    }
+
+    if (data.length === 0) {
+      throw new Error("No operation report found.");
+    }
+
+    const finalData = await Promise.all(
+      [data].map(async (item) => {
+        const userId = item.writer;
+        const { data: user, error: userError } =
+          await supabaseAdmin.auth.admin.getUserById(userId);
+        if (userError) {
+          throw new Error(userError.message);
+        }
+        return { ...item, writer: user?.user.user_metadata?.fullName };
+      })
+    );
+    console.log(finalData[0],"finalData");
+    return finalData[0];
+  } catch (error) {
+    throw new Error(error.message);
+  }
+}
 export async function createEditOperationReport(newOperationReport, id) {
   // 1. Create/edit cabin
 
@@ -76,7 +107,7 @@ export async function deleteOperationReport(id) {
 
 export async function editOperationreportApi(editedData,id){
 
-  const { data, error } = await supabase
+  const { data } = await supabase
   .from('operation_report')
   .update({ ...editedData })
   .eq('id', id)

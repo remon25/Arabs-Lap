@@ -68,7 +68,6 @@ export async function getLabSingleReport(id) {
     throw new Error(error.message);
   }
 }
-getLabSingleReport(118);
 export async function createEditLabReport(newLabReport, id) {
   // 1. Create/edit cabin
 

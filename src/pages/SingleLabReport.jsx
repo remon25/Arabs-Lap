@@ -91,7 +91,7 @@ const SingleLabReport = () => {
         <ButtonText onClick={moveBack}>&larr; رجوع</ButtonText>
       </Row>
 
-      <div ref={componentRef}>
+      <div style={{padding:"1rem"}} ref={componentRef}>
         <Table>
           <thead>
             <tr>
