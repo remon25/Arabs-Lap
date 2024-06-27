@@ -1,7 +1,7 @@
 import { useRef } from "react";
 import { useGetOperationSingleReport } from "../features/operation-report/useGetOperationSingleReport";
 import { useMoveBack } from "../hooks/useMoveBack";
-import { useDeleteLabReport } from "../features/lab-report/useDeleteLabReport";
+import { useDeleteOperationReport } from "../features/operation-report/useDeleteOperationReport";
 import { useNavigate } from "react-router-dom";
 import { useRoles } from "../features/authentication/useGetRoles";
 import CreateOperationReportForm from "../features/operation-report/CreateOperationReportForm";
@@ -44,7 +44,7 @@ const StyledInfo = styled.div`
 const SingleOperationReport = () => {
   const { isLoading, operationReport } = useGetOperationSingleReport();
   const moveBack = useMoveBack();
-  const { isDeleting, mutate } = useDeleteLabReport();
+  const { isDeleting, mutate } = useDeleteOperationReport();
   const navigate = useNavigate();
   const componentRef = useRef();
   const { isAdmin } = useRoles();
