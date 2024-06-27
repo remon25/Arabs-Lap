@@ -43,7 +43,7 @@ function Today() {
   return (
     <StyledToday>
       <Row type="horizontal">
-        <Heading as="h2">تقارير مختبر اليوم</Heading>
+        <Heading as="h2">تقارير المختبر اليوم</Heading>
       </Row>
       {isLoading ? (
         <Spinner />
