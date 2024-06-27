@@ -120,11 +120,13 @@ export async function editOperationreportApi(editedData,id){
 
 export async function getOperationReportsToday() {
   const today = getToday();
+  const utcToday = new Date(today).toISOString();
+  
   const { data, error } = await supabase
     .from("operation_report")
-    .select('id,writer')
-    .gte('created_at', `${today}T00:00:00`)
-    .lte('created_at', `${today}T23:59:59`)
+    .select('id, writer')
+    .gte('created_at', `${utcToday}T00:00:00Z`) 
+    .lte('created_at', `${utcToday}T23:59:59Z`) 
     .order("created_at");
 
   if (error) {
